@@ -429,6 +429,8 @@ exports.addUserFilesInfo = onRequest(
   }
 );
 
+//update user info
+
 exports.deleteUserFilesInfo = onRequest(
   async (req: Request, res): Promise<any> => { }
 );
