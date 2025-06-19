@@ -25,7 +25,7 @@ const auth = admin.auth();
 const client = new Client({});
 
 
-exports.createUser = onRequest(async (req, res) => {
+/* exports.createUser = onRequest(async (req, res) => {
   try {
     const data = req.body;
     const validatedData = userInptSchema.safeParse(req.body);
@@ -43,9 +43,9 @@ exports.createUser = onRequest(async (req, res) => {
     console.error('Error inserting data:', error);
     res.status(500).send(error);
   }
-});
+}); */
 
-exports.getUsers = onRequest(async (req, res) => {
+/* exports.getUsers = onRequest(async (req, res) => {
   try {
     const db = admin.firestore();
     const usersSnapshot = await db.collection('users').get();
@@ -56,8 +56,8 @@ exports.getUsers = onRequest(async (req, res) => {
     console.error('Error fetching users:', error);
     res.status(500).send('Internal Server Error');
   }
-});
-exports.getUserInfo = onRequest(async (req, res) => {
+}); */
+/* exports.getUserInfo = onRequest(async (req, res) => {
   try {
     const db = admin.firestore();
     const usersSnapshot = await db.collection('users').get();
@@ -68,8 +68,9 @@ exports.getUserInfo = onRequest(async (req, res) => {
     console.error('Error fetching users:', error);
     res.status(500).send('Internal Server Error');
   }
-});
-exports.createRequest = onRequest(async (req, res) => {
+}); */
+
+/* exports.createRequest = onRequest(async (req, res) => {
   try {
     const token = req.get('authToken');
     if (!token) {
@@ -130,7 +131,7 @@ exports.getRequests = onRequest(async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
+ */
 exports.getRequestsByUser = onRequest(
   async (req: Request, res): Promise<any> => {
     try {
@@ -428,8 +429,6 @@ exports.addUserFilesInfo = onRequest(
     res.send('File uploaded successfully!');
   }
 );
-
-//update user info
 
 exports.deleteUserFilesInfo = onRequest(
   async (req: Request, res): Promise<any> => { }

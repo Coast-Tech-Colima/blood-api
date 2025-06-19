@@ -10,4 +10,5 @@ const donationApprovalRequestInputSchema = z.object({
   address: z.string().trim().min(1, { message: "Required" }).optional(),
   status: z.boolean(),
 });
+
 export default donationApprovalRequestInputSchema;
