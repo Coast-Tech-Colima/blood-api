@@ -1,13 +1,18 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "allowSyntheticDefaultImports": true,
     "target": "es2017",
     "strict": true,
     "esModuleInterop": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
     "skipLibCheck": true,
+    "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "baseUrl": "./",
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
