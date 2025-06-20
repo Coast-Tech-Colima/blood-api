@@ -1,11 +1,11 @@
 {
   "name": "express-api",
   "version": "1.0.0",
-  "main": "src/index.ts",
+  "main": "index.js",
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "nodemon --watch src --exec ts-node src/index.ts",
-    "build": "tsc  build --output public",
+    "build": "tsc",
     "build:ui": "@powershell Remove-Item -Recurse -Force dist && cd ../frontend && npm run build && @powershell Copy-Item -Recurse dist ../backend",
     "build:watch": "tsc --watch",
     "lint": "eslint .",
