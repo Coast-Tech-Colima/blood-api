@@ -16,4 +16,3 @@ const auth = firebase_admin_1.default.auth();
 exports.auth = auth;
 const db = firebase_admin_1.default.firestore();
 exports.db = db;
-//# sourceMappingURL=db.js.map

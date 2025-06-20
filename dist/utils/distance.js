@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.haversineDistance = void 0;
+exports.haversineDistance = haversineDistance;
 function haversineDistance(lat1, lon1, lat2, lon2) {
     lat1 = degreesToRadians(lat1);
     lon1 = degreesToRadians(lon1);
@@ -16,7 +16,6 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return EARTH_RADIUS_IN_KILOMETERS * c;
 }
-exports.haversineDistance = haversineDistance;
 /**
  * Converts degrees to radians.
  *
@@ -26,4 +25,3 @@ exports.haversineDistance = haversineDistance;
 function degreesToRadians(degrees) {
     return degrees * (Math.PI / 180);
 }
-//# sourceMappingURL=distance.js.map

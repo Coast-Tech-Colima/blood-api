@@ -12,4 +12,3 @@ const donationApprovalRequestInputSchema = zod_1.z.object({
     status: zod_1.z.boolean(),
 });
 exports.default = donationApprovalRequestInputSchema;
-//# sourceMappingURL=donationRequest.schema.js.map

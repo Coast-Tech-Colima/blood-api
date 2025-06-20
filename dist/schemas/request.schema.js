@@ -18,4 +18,3 @@ const requestInputSchema = zod_1.z.object({
     img: zod_1.z.string().optional(),
 });
 exports.default = requestInputSchema;
-//# sourceMappingURL=request.schema.js.map

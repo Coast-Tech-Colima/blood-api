@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -7,7 +16,7 @@ exports.getRequestByBloodTypeAndLocation = exports.editRequest = exports.getRequ
 const request_schema_1 = __importDefault(require("../schemas/request.schema"));
 const db_1 = require("../utils/db");
 const distance_1 = require("../utils/distance");
-const createRequest = async (req, res) => {
+const createRequest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const validatedData = request_schema_1.default.safeParse(req.body);
         if (!validatedData.success) {
@@ -15,7 +24,7 @@ const createRequest = async (req, res) => {
         }
         const data = validatedData.data;
         const docRef = db_1.db.collection("requests").doc();
-        await docRef.set(data);
+        yield docRef.set(data);
         res
             .status(201)
             .json({ message: "Request created successfully", id: docRef.id });
@@ -24,11 +33,11 @@ const createRequest = async (req, res) => {
         console.error("Error creating request:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
-};
+});
 exports.createRequest = createRequest;
-const getRequests = async (req, res) => {
+const getRequests = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const requestsSnapshot = await db_1.db.collection("requests").get();
+        const requestsSnapshot = yield db_1.db.collection("requests").get();
         const requests = requestsSnapshot.docs.map((doc) => (Object.assign({ id: doc.id }, doc.data())));
         res.status(200).json(requests);
     }
@@ -36,13 +45,13 @@ const getRequests = async (req, res) => {
         console.error("Error fetching requests:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
-};
+});
 exports.getRequests = getRequests;
-const getRequestById = async (req, res) => {
+const getRequestById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const requestId = req.params.id;
         const docRef = db_1.db.collection("requests").doc(requestId);
-        const doc = await docRef.get();
+        const doc = yield docRef.get();
         if (!doc.exists) {
             return res.status(404).json({ error: "Request not found" });
         }
@@ -52,17 +61,17 @@ const getRequestById = async (req, res) => {
         console.error("Error fetching request:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
-};
+});
 exports.getRequestById = getRequestById;
-const getRequestsByUser = async (req, res) => {
+const getRequestsByUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const token = req.get("authToken");
         if (!token) {
             throw new Error("No auth token detected: Unauthorized");
         }
-        const user = await db_1.auth.verifyIdToken(token);
-        const docRef = await db_1.db.collection("requests");
-        const docSnapshot = await docRef.where("userId", "==", user.uid).get();
+        const user = yield db_1.auth.verifyIdToken(token);
+        const docRef = yield db_1.db.collection("requests");
+        const docSnapshot = yield docRef.where("userId", "==", user.uid).get();
         if (docSnapshot.empty) {
             res.status(404).send("Request not found");
         }
@@ -76,9 +85,9 @@ const getRequestsByUser = async (req, res) => {
         console.error("Error fetching request:", error);
         res.status(500).send("Internal Server Error");
     }
-};
+});
 exports.getRequestsByUser = getRequestsByUser;
-const editRequest = async (req, res) => {
+const editRequest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const documentId = req.query.documentId;
         const validatedData = request_schema_1.default.safeParse(req.body);
@@ -87,7 +96,7 @@ const editRequest = async (req, res) => {
             if (!documentId) {
                 return res.status(400).send('Missing document ID or updated data');
             }
-            const querySnapshot = await db_1.db
+            const querySnapshot = yield db_1.db
                 /* eslint-disable indent */
                 .collection('requests')
                 /* eslint-disable indent */
@@ -98,7 +107,7 @@ const editRequest = async (req, res) => {
                 return res.status(404).send('Document not found');
             }
             const docRef = querySnapshot.docs[0].ref;
-            await docRef.update(data);
+            yield docRef.update(data);
             res.status(200).send('Data inserted successfully yedd==eaaah');
         }
         else {
@@ -109,9 +118,9 @@ const editRequest = async (req, res) => {
         console.error('Error editing document:', error);
         res.status(500).send('Internal server error');
     }
-};
+});
 exports.editRequest = editRequest;
-const getRequestByBloodTypeAndLocation = async (req, res) => {
+const getRequestByBloodTypeAndLocation = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const bloodType = req.query.bloodType;
         const lng = req.query.lng;
@@ -120,8 +129,8 @@ const getRequestByBloodTypeAndLocation = async (req, res) => {
         if (!bloodType) {
             return res.status(400).send('Missing bloodType in request URL');
         }
-        const docRef = await db_1.db.collection('requests');
-        const docSnapshot = await docRef
+        const docRef = yield db_1.db.collection('requests');
+        const docSnapshot = yield docRef
             .where('bloodType', '==', bloodType)
             .get();
         if (docSnapshot.empty) {
@@ -129,7 +138,7 @@ const getRequestByBloodTypeAndLocation = async (req, res) => {
         }
         const todayDate = new Date();
         const result = [];
-        docSnapshot.forEach(async (collection) => {
+        docSnapshot.forEach((collection) => __awaiter(void 0, void 0, void 0, function* () {
             var _a;
             const collectionData = collection.data();
             const deadlineDate = new Date(collectionData.dueDate);
@@ -146,13 +155,12 @@ const getRequestByBloodTypeAndLocation = async (req, res) => {
                 }
             }
             result.push(collection.data());
-        });
+        }));
         res.status(200).send(result);
     }
     catch (error) {
         console.error('Error fetching request:', error);
         res.status(500).send('Internal Server Error');
     }
-};
+});
 exports.getRequestByBloodTypeAndLocation = getRequestByBloodTypeAndLocation;
-//# sourceMappingURL=requestController.js.map

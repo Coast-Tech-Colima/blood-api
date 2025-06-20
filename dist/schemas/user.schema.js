@@ -18,4 +18,3 @@ const userSchema = zod_1.z.object({
     radioDistancePreference: zod_1.z.string().optional(),
 });
 exports.default = userSchema;
-//# sourceMappingURL=user.schema.js.map

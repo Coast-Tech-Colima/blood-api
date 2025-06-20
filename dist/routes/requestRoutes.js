@@ -10,4 +10,3 @@ router.get('/:id', requestController_1.getRequestById);
 router.get('/user', getRequestsByUser);
 router.get('/bloodTypeAndLocation', getRequestByBloodTypeAndLocation); */
 exports.default = router;
-//# sourceMappingURL=requestRoutes.js.map

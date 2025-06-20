@@ -8,4 +8,3 @@ router.put('/donation-approval/:requestId', donationController_1.updateDonationA
 /* router.get('/donation-approval/user', getDonationApprovalRequestsByUser);
 router.get('/donation-approval/request/:requestId', getdonationApprovalRequestsByRequest); */
 exports.default = router;
-//# sourceMappingURL=donationRoutes.js.map

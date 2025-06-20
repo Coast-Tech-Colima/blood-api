@@ -19,4 +19,3 @@ router.get('/:id', userController_1.getUserInfo);
 // router.get('/user', getUsersByUser);
 // router.get('/bloodTypeAndLocation', getUsersByBloodTypeAndLocation); */  
 exports.default = router;
-//# sourceMappingURL=userRoutes.js.map
