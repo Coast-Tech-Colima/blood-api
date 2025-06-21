@@ -9,15 +9,11 @@ const options = {
       description: 'API documentation for Blood API',
     },
     servers: [
-      {
-        url: 'http://localhost:3000',
-      },
-      {
-        url: 'https://blood-api.vercel.app', 
-      }
+      { url: 'http://localhost:3000' },
+      { url: 'https://blood-api.vercel.app' }
     ],
   },
-  apis: ['./src/routes/*.ts', './src/controllers/*.ts'],
+  apis: ['src/routes/*.ts', 'src/controllers/*.ts'], // <-- No leading ./
 };
 
 const swaggerSpec = swaggerJSDoc(options);
