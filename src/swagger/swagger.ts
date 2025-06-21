@@ -1,4 +1,5 @@
 import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 
 const options = {
   definition: {
@@ -15,6 +16,7 @@ const options = {
   },
   apis: ['src/routes/*.ts', 'src/controllers/*.ts'], // <-- No leading ./
 };
+
 
 const swaggerSpec = swaggerJSDoc(options);
 
