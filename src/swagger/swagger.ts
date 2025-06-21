@@ -13,7 +13,7 @@ const options = {
         url: 'http://localhost:3000',
       },
       {
-        url: 'https://blood-api.vercel.app/', 
+        url: 'https://blood-api.vercel.app', 
       }
     ],
   },
