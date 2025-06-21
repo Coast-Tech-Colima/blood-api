@@ -10,8 +10,11 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:3000', // <-- updated
+        url: 'http://localhost:3000',
       },
+      {
+        url: 'https://blood-api.vercel.app/', 
+      }
     ],
   },
   apis: ['./src/routes/*.ts', './src/controllers/*.ts'],
