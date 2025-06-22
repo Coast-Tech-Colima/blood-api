@@ -1,28 +1,58 @@
 import { Request, Response } from "express";
 import { z } from "zod";
 import requestInputSchema from "../schemas/request.schema";
+import {Client} from "@googlemaps/google-maps-services-js";
 import {db,auth} from "../utils/db";
 import { haversineDistance } from "../utils/distance"
+import { v4 as uuid } from 'uuid';
+const client = new Client({});
 
 
-export const createRequest = async (req: Request, res: Response) => {
+export async function createRequest(req: Request, res:Response ) {
   try {
-    const validatedData = requestInputSchema.safeParse(req.body);
-    if (!validatedData.success) {
-      return res.status(400).json(validatedData.error);
+    const token = req.get('authToken');
+    if (!token) {
+      throw new Error('No auth token detected: Unauthorized');
     }
-    const data = validatedData.data;
-    const docRef = db.collection("requests").doc();
-    await docRef.set(data);
 
-    res
-      .status(201)
-      .json({ message: "Request created successfully", id: docRef.id });
-  } catch (error) {
-    console.error("Error creating request:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    const validatedData = requestInputSchema.safeParse(req.body);
+    const user = await auth.verifyIdToken(token);
+
+    if (!validatedData.success) {
+      return res.status(400).send(validatedData.error);
+    }
+
+    const data = validatedData.data;
+    const id = uuid();
+
+    let location:any = {};
+    try {
+      const result = await client.geocode({
+        params: {
+          address: data.place,
+          key: 'AIzaSyAgJ4jtf-vFn_Qd_W4kWJEKLmw2KFUeL0Y',
+        },
+      });
+      location = result.data.results[0].geometry;
+    } catch (e) {
+      return res.status(400).send('Error: The address is not valid');
+    }
+
+    const docRef = db.collection('requests').doc();
+    await docRef.set({
+      ...data,
+      id,
+      userId: user.uid,
+      location: location?.location ?? '',
+      status: 'active',
+    });
+
+    res.status(200).send('Data inserted successfully');
+  } catch (error:any) {
+    console.error(error?.message);
+    res.status(500).send(error?.message);
   }
-};
+}
 
 export const getRequests = async (req: Request, res: Response) => {
   try {

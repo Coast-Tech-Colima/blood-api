@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import admin from 'firebase-admin';
 import userInptSchema from '../schemas/user.schema';
 import {db} from '../utils/db';;
 
@@ -41,3 +40,23 @@ export const getUserInfo = async (req: Request, res: Response) => {
     res.status(500).send('Internal Server Error');
   }
 };
+
+export const deleteUserFilesInfo = (req: Request, res: any): Promise<any> => {
+  return Promise.resolve();
+};
+
+export const updateUserFile = (req: Request, res: any): Promise<any> => {
+  return Promise.resolve();
+};
+
+export const editUserInfo = async (req: Request, res: Response) => {
+  try {
+    const usersSnapshot = await db.collection('users').get();
+    const data = usersSnapshot.docs.map((doc) => doc.data());
+    res.status(200).send(data);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+

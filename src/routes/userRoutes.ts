@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createUser, getUsers, getUserInfo } from '../controllers/userController';
+import { createUser, getUsers, getUserInfo,updateUserFile, editUserInfo} from '../controllers/userController';
 
 const router = Router();
 
@@ -15,8 +15,9 @@ router.post('/users', createUser);
  */
 router.get('/', getUsers);
 router.get('/:id', getUserInfo);
-// /* router.put('/:documentId', editUser);
-// router.get('/user', getUsersByUser);
-// router.get('/bloodTypeAndLocation', getUsersByBloodTypeAndLocation); */  
+router.post('/', createUser);
+router.put('/:documentId', editUserInfo);
+router.post('/documents/', updateUserFile);
+router.put('/documents/', updateUserFile);
 
 export default router;

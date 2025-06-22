@@ -117,7 +117,7 @@ const client = new Client({});
     console.log(error.message);
     res.status(500).send(error.message);
   }
-});
+}); 
 
 exports.getRequests = onRequest(async (req, res) => {
   try {
