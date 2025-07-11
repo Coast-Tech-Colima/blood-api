@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createUser, getUsers, getUserInfo,updateUserFile, editUserInfo} from '../controllers/userController';
+import { createUser, getUsers, getUserInfo,updateUserFile, editUserInfo, deleteUserFilesInfo} from '../controllers/userController';
 
 const router = Router();
 
@@ -16,8 +16,9 @@ router.post('/users', createUser);
 router.get('/', getUsers);
 router.get('/:id', getUserInfo);
 router.post('/', createUser);
-router.put('/:documentId', editUserInfo);
+/* router.get('/profile', getCurrentUserInfo); // Assuming this function is defined in userController
+ */router.put('/:userId', editUserInfo);
 router.post('/documents/', updateUserFile);
-router.put('/documents/', updateUserFile);
+router.delete('/documents/', deleteUserFilesInfo);
 
 export default router;

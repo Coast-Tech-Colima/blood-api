@@ -14,7 +14,7 @@ router.post('/', createRequest);
 router.get('/', getRequests);
 router.get('/:id', getRequestById);
 router.put('/:documentId', editRequest);
-router.get('/user', getRequestsByUser);
-router.get('/bloodTypeAndLocation', getRequestByBloodTypeAndLocation); 
+router.get('/user/requests', getRequestsByUser);
+router.get('/bloodTypeAndLocation/requests', getRequestByBloodTypeAndLocation);
 
-export default router;
+export default router;  

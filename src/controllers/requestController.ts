@@ -71,15 +71,17 @@ export const getRequests = async (req: Request, res: Response) => {
 
 export const getRequestById = async (req: Request, res: Response) => {
   try {
-    const requestId = req.params.id;
-    const docRef = db.collection("requests").doc(requestId);
-    const doc = await docRef.get();
 
-    if (!doc.exists) {
+    const requestId = req.params.id;
+    const docRef = db.collection("requests").where("id", "==", requestId);
+    const doc = await docRef.get();
+    if (doc.empty) {
       return res.status(404).json({ error: "Request not found" });
     }
 
-    res.status(200).json({ id: doc.id, ...doc.data() });
+    const fetchedDoc = doc.docs[0];
+
+    res.status(200).json({ id: fetchedDoc.id, ...fetchedDoc.data() });
   } catch (error) {
     console.error("Error fetching request:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -88,10 +90,13 @@ export const getRequestById = async (req: Request, res: Response) => {
 
 export const getRequestsByUser = async (req: Request, res:Response): Promise<any> => {
   try {
+    console.log("getRequestsByUser called");
     const token = req.get("authToken");
+
     if (!token) {
-      throw new Error("No auth token detected: Unauthorized");
+     res.status(403).send("No auth token detected: Unauthorized");
     }
+
     const user = await auth.verifyIdToken(token as string);
     const docRef = await db.collection("requests");
     const docSnapshot = await docRef.where("userId", "==", user.uid).get();
@@ -154,46 +159,49 @@ export const getRequestByBloodTypeAndLocation = async (
     const lng: any = req.query.lng;
     const lat: any = req.query.lat;
     const rateLimit = 8;
+
     if (!bloodType) {
       return res.status(400).send('Missing bloodType in request URL');
     }
-      const docRef = await db.collection('requests');
-      const docSnapshot = await docRef
-        .where('bloodType', '==', bloodType)
-        .get();
 
-      if (docSnapshot.empty) {
-        res.status(404).send('Request not found');
-      }
-      const todayDate = new Date();
-      const result: any = [];
-      docSnapshot.forEach(async (collection) => {
-        const collectionData = collection.data();
+    const docRef = db.collection('requests');
+    const docSnapshot = await docRef.where('bloodType', '==', bloodType).get();
 
-        const deadlineDate = new Date(collectionData.dueDate);
-        if (deadlineDate < todayDate) {
-          return;
-        }
-        if (!collectionData?.location) {
-          return;
-        }
-        if (lat && lng) {
-          const distance = haversineDistance(
-            lat,
-            lng,
-            collectionData?.location?.lat,
-            collectionData?.location.lng
-          );
-          if (distance > rateLimit) {
-            return;
-          }
-        }
-
-        result.push(collection.data());
-      });
-      res.status(200).send(result);
-    } catch (error) {
-      console.error('Error fetching request:', error);
-      res.status(500).send('Internal Server Error');
+    if (docSnapshot.empty) {
+      return res.status(404).send('Request not found');
     }
+
+    const todayDate = new Date();
+    const result: any[] = [];
+
+    for (const collection of docSnapshot.docs) {
+      const collectionData = collection.data();
+
+      const deadlineDate = new Date(collectionData.dueDate);
+      if (deadlineDate < todayDate) {
+        continue;
+      }
+      if (!collectionData?.location) {
+        continue;
+      }
+      if (lat && lng) {
+        const distance = haversineDistance(
+          lat,
+          lng,
+          collectionData?.location?.lat,
+          collectionData?.location.lng
+        );
+        if (distance > rateLimit) {
+          continue;
+        }
+      }
+
+      result.push(collectionData);
+    }
+
+    return res.status(200).send(result);
+  } catch (error) {
+    console.error('Error fetching request:', error);
+    return res.status(500).send('Internal Server Error');
   }
+};

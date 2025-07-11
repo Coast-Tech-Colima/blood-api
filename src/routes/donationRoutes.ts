@@ -8,10 +8,10 @@ import {
 
 const router = Router();
 
-router.post('/donation-approval', createDonationApprovalRequest);
-router.put('/donation-approval/:requestId', updateDonationApprovalRequest);
-router.get('/donation-approval/user', getDonationApprovalRequestsByUser);
-router.get('/donation-approval/request/:requestId', getdonationApprovalRequestsByRequest);
+router.post('/', createDonationApprovalRequest);
+router.put('/:requestId', updateDonationApprovalRequest);
+router.get('/user', getDonationApprovalRequestsByUser);
+router.get('/request/:requestId', getdonationApprovalRequestsByRequest);
 
 
 export default router;
