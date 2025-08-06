@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import userInptSchema from '../schemas/user.schema';
-import {db} from '../utils/db';;
+import { db } from '../utils/db';
 
 export const createUser = async (req: Request, res: Response) => {
   try {
@@ -32,11 +32,16 @@ export const getUsers = async (req: Request, res: Response) => {
 
 export const getUserInfo = async (req: Request, res: Response) => {
   try {
-    const usersSnapshot = await db.collection('users').get();
-    const data = usersSnapshot.docs.map((doc) => doc.data());
-    res.status(200).send(data);
+    const { id } = req.params;
+    const userDoc = await db.collection('users').doc(id).get();
+
+    if (!userDoc.exists) {
+      return res.status(404).send('User not found');
+    }
+
+    res.status(200).send(userDoc.data());
   } catch (error) {
-    console.error('Error fetching users:', error);
+    console.error('Error fetching user:', error);
     res.status(500).send('Internal Server Error');
   }
 };
